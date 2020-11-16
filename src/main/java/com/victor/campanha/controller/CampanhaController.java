@@ -31,8 +31,9 @@ public class CampanhaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Long> criar(@Valid @RequestBody CampanhaDTO campanha) {
-		return new ResponseEntity<Long>(campanhaService.criar(campanha), HttpStatus.CREATED);
+	public ResponseEntity<?> criar(@Valid @RequestBody CampanhaDTO campanha) {
+		campanhaService.criar(campanha);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")

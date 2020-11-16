@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.victor.campanha.amqp.CampanhaAMQP;
 import com.victor.campanha.dto.CampanhaDTO;
 import com.victor.campanha.entity.Campanha;
 import com.victor.campanha.repository.CampanhaRepository;
@@ -20,19 +21,17 @@ import com.victor.campanha.service.CampanhaService;
 public class CampanhaServiceImpl implements CampanhaService {
 	
 	private CampanhaRepository campanhaRepository;
+	private CampanhaAMQP campanhaAMQP;
 	
 	@Autowired
-	public CampanhaServiceImpl(CampanhaRepository campanhaRepository) {
+	public CampanhaServiceImpl(CampanhaRepository campanhaRepository, CampanhaAMQP campanhaAMQP) {
 		this.campanhaRepository = campanhaRepository;
+		this.campanhaAMQP = campanhaAMQP;
 	}
 	
 	@Override
-	public Long criar(CampanhaDTO campanhaDTO) {
-		Campanha campanhaSalva = this.campanhaRepository.save(new Campanha(campanhaDTO));
-		return campanhaSalva.getId();
-		
-		//TODO atualziar datas
-		//TODO disparar evento notificacao
+	public void criar(CampanhaDTO campanhaDTO) {
+		this.campanhaAMQP.sendCriarCampanhaMessage(new Campanha(campanhaDTO));
 	}
 
 	@Override
@@ -41,10 +40,8 @@ public class CampanhaServiceImpl implements CampanhaService {
 		
 		Campanha campanha = new Campanha(campanhaDTO);
 		campanha.setId(id);
-		this.campanhaRepository.save(campanha);
 		
-		//TODO atualziar datas
-		//TODO disparar evento notificacao
+		this.campanhaAMQP.sendCriarCampanhaMessage(campanha);
 	}
 
 	@Override

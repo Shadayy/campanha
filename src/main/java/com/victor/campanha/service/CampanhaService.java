@@ -6,7 +6,7 @@ import com.victor.campanha.dto.CampanhaDTO;
 
 public interface CampanhaService {
 
-	public Long criar(CampanhaDTO campanha);
+	public void criar(CampanhaDTO campanha);
 	
 	public void atualizar(Long id, CampanhaDTO campanhaDTO);
 	
