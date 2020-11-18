@@ -63,4 +63,10 @@ public class Campanha {
 		this.setInicioVigencia(campanhaDTO.getInicioVigencia());
 		this.setTerminoVigencia(campanhaDTO.getTerminoVigencia());
 	}
+	
+	@Transient
+	public Campanha aumentarDiasTerminoVigencia() {
+		this.setTerminoVigencia(this.getTerminoVigencia() + 1);
+		return this;
+	}
 }

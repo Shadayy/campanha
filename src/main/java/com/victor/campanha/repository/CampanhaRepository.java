@@ -14,7 +14,9 @@ public interface CampanhaRepository extends JpaRepository<Campanha, Long>, JpaSp
 	
 	Optional<Campanha> findByIdAndDeletadoFalse(Long id);
 	
-	List<Campanha> findAllByDeletadoFalseAndTerminoVigenciaGreaterThan(Long terminoVigencia);
+	List<Campanha> findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Long terminoVigencia);
+	
+	List<Campanha> findAllByDeletadoFalseAndTerminoVigencia(Long terminoVigencia);
 	
 	List<Campanha> findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(Long terminoVigencia, Long idTimeCoracao);
 }

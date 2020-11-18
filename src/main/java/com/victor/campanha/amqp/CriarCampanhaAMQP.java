@@ -1,18 +1,16 @@
 package com.victor.campanha.amqp;
 
+import java.io.IOException;
+
 import org.springframework.amqp.core.Queue;
 
 import com.victor.campanha.entity.Campanha;
 
-public interface CampanhaAMQP {
+public interface CriarCampanhaAMQP {
 	
 	public Queue criarCampanhaQueue();
 	
-	public Queue campanhasAtualizadasQueue();
-	
 	public void sendCriarCampanhaMessage(Campanha campanha);
 	
-	public void sendCampanhaAtualizadaMessage(Campanha campanha);
-	
-	public void receiveCriarCampanhaMessage(String content);
+	public void receiveCriarCampanhaMessage(String content) throws IOException;
 }

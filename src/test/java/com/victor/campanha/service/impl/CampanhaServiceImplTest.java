@@ -66,7 +66,7 @@ class CampanhaServiceImplTest {
 	void when_listarAtivoEVigente_should_return_list() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThan(Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
+		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
 		List<CampanhaDTO> campanhasDTO = campanhaServiceImpl.listarAtivoEVigente();
 		CampanhaDTO campanhaDTO = campanhasDTO.get(0);
 		
@@ -77,7 +77,7 @@ class CampanhaServiceImplTest {
 				() -> Assertions.assertEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
 		);
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThan(Mockito.anyLong())).thenReturn(Collections.emptyList());
+		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.emptyList());
 		campanhasDTO = campanhaServiceImpl.listarAtivoEVigente();
 		
 		Assertions.assertTrue(campanhasDTO.isEmpty());

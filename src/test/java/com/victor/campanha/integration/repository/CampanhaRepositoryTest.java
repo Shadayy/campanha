@@ -57,7 +57,7 @@ class CampanhaRepositoryTest {
 		
 		campanhaRepository.save(campanha);
 		
-		List<Campanha> campanhas = campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThan(terminoVigencia -1);
+		List<Campanha> campanhas = campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(terminoVigencia -1);
 		
 		Assertions.assertTrue(() -> campanhas.contains(campanha));
 	}

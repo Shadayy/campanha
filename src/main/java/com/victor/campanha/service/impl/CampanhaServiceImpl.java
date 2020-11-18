@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.victor.campanha.amqp.CampanhaAMQP;
+import com.victor.campanha.amqp.CriarCampanhaAMQP;
 import com.victor.campanha.dto.CampanhaDTO;
 import com.victor.campanha.entity.Campanha;
 import com.victor.campanha.repository.CampanhaRepository;
@@ -21,10 +21,10 @@ import com.victor.campanha.service.CampanhaService;
 public class CampanhaServiceImpl implements CampanhaService {
 	
 	private CampanhaRepository campanhaRepository;
-	private CampanhaAMQP campanhaAMQP;
+	private CriarCampanhaAMQP campanhaAMQP;
 	
 	@Autowired
-	public CampanhaServiceImpl(CampanhaRepository campanhaRepository, CampanhaAMQP campanhaAMQP) {
+	public CampanhaServiceImpl(CampanhaRepository campanhaRepository, CriarCampanhaAMQP campanhaAMQP) {
 		this.campanhaRepository = campanhaRepository;
 		this.campanhaAMQP = campanhaAMQP;
 	}
@@ -52,7 +52,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public List<CampanhaDTO> listarAtivoEVigente() {
-		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThan(System.currentTimeMillis());
+		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(System.currentTimeMillis());
 		
 		return campanhas.stream()
 				.map(campanha ->
