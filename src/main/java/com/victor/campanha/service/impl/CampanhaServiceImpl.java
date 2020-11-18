@@ -36,10 +36,11 @@ public class CampanhaServiceImpl implements CampanhaService {
 
 	@Override
 	public void atualizar(Long id, CampanhaDTO campanhaDTO) {
-		getCampanhaOrThrow(id);
-		
-		Campanha campanha = new Campanha(campanhaDTO);
-		campanha.setId(id);
+		Campanha campanha = getCampanhaOrThrow(id);
+		campanha.setNome(campanhaDTO.getNome());
+		campanha.setIdTimeCoracao(campanhaDTO.getIdTimeCoracao());
+		campanha.setInicioVigencia(campanhaDTO.getInicioVigencia());
+		campanha.setTerminoVigencia(campanhaDTO.getTerminoVigencia());
 		
 		this.campanhaAMQP.sendCriarCampanhaMessage(campanha);
 	}
@@ -55,9 +56,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(System.currentTimeMillis());
 		
 		return campanhas.stream()
-				.map(campanha ->
-					new CampanhaDTO(campanha)
-				)
+				.map(CampanhaDTO::new)
 				.collect(Collectors.toList());
 	}
 	
@@ -66,9 +65,7 @@ public class CampanhaServiceImpl implements CampanhaService {
 		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(System.currentTimeMillis(), idTimeDoCoracao);
 		
 		return campanhas.stream()
-				.map(campanha ->
-					new CampanhaDTO(campanha)
-				)
+				.map(CampanhaDTO::new)
 				.collect(Collectors.toList());
 	}
 

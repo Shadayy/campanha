@@ -18,8 +18,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.victor.campanha.amqp.CriarCampanhaAMQP;
 import com.victor.campanha.dto.CampanhaDTO;
 import com.victor.campanha.entity.Campanha;
+import com.victor.campanha.generator.CampanhaDTOGenerator;
 import com.victor.campanha.generator.CampanhaGenerator;
 import com.victor.campanha.repository.CampanhaRepository;
 
@@ -27,6 +29,9 @@ class CampanhaServiceImplTest {
 	
 	@Mock
 	private CampanhaRepository campanhaRepository;
+	
+	@Mock
+	private CriarCampanhaAMQP criarCampanhaAMQP;
 	
 	@InjectMocks
 	private CampanhaServiceImpl campanhaServiceImpl;
@@ -117,11 +122,58 @@ class CampanhaServiceImplTest {
 	
 	@Test
 	void when_deletar_with_valid_id_should_deletar() {
-		Campanha mockCampanha = Mockito.mock(Campanha.class);
+		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findByIdAndDeletadoFalse(mockCampanha.getId())).thenReturn(Optional.of(mockCampanha));
-		campanhaServiceImpl.deletar(mockCampanha.getId());
+		when(campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
+		campanhaServiceImpl.deletar(campanha.getId());
 		
-		verify(mockCampanha, times(1)).deletar();
+		Assertions.assertTrue(campanha.isDeletado());
+	}
+	
+	@Test
+	void when_atualizar_with_invalid_id_should_throw() {
+		Long idCampanha = 1l;
+		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		when(campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
+		
+		Assertions.assertThrows(
+				EntityNotFoundException.class, 
+				() -> campanhaServiceImpl.atualizar(idCampanha, campanhaDTO)
+		);
+	}
+	
+	@Test
+	void when_atualizar_with_valid_id_should_atualizarr() {
+		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
+		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		
+		Assertions.assertAll(
+				() -> Assertions.assertNotEquals(campanha.getNome(), campanhaDTO.getNome()),
+				() -> Assertions.assertNotEquals(campanha.getIdTimeCoracao(), campanhaDTO.getIdTimeCoracao()),
+				() -> Assertions.assertNotEquals(campanha.getInicioVigencia(), campanhaDTO.getInicioVigencia()),
+				() -> Assertions.assertNotEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
+		);
+		
+		when(campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
+		
+		campanhaServiceImpl.atualizar(campanha.getId(), campanhaDTO);
+		
+		Assertions.assertAll(
+				() -> Assertions.assertEquals(campanha.getNome(), campanhaDTO.getNome()),
+				() -> Assertions.assertEquals(campanha.getIdTimeCoracao(), campanhaDTO.getIdTimeCoracao()),
+				() -> Assertions.assertEquals(campanha.getInicioVigencia(), campanhaDTO.getInicioVigencia()),
+				() -> Assertions.assertEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
+		);
+		
+		verify(criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
+	}
+	
+	@Test
+	void when_criar_should_call_sendCriarCampanhaMessage() {
+		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		
+		campanhaServiceImpl.criar(campanhaDTO);
+		
+		verify(criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
 	}
 }

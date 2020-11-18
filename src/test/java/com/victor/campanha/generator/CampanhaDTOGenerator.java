@@ -2,20 +2,17 @@ package com.victor.campanha.generator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import com.victor.campanha.dto.CampanhaDTO;
 
 public class CampanhaDTOGenerator {
 	
 	public CampanhaDTO generateValidCampanhaDTO() {
-		AtomicLong atomicLong = new AtomicLong(100);
-		
 		CampanhaDTO campanhaDTO = new CampanhaDTO();
-		campanhaDTO.setNome("Campanha - "+ atomicLong.getAndIncrement());
-		campanhaDTO.setIdTimeCoracao(atomicLong.getAndIncrement());
-		campanhaDTO.setInicioVigencia(atomicLong.getAndIncrement());
-		campanhaDTO.setTerminoVigencia(atomicLong.getAndIncrement());
+		campanhaDTO.setNome("Campanha - "+ AtomicIdGenerator.getInstance().getNewId());
+		campanhaDTO.setIdTimeCoracao(AtomicIdGenerator.getInstance().getNewId());
+		campanhaDTO.setInicioVigencia(AtomicIdGenerator.getInstance().getNewId());
+		campanhaDTO.setTerminoVigencia(AtomicIdGenerator.getInstance().getNewId());
 		
 		return campanhaDTO;
 	}

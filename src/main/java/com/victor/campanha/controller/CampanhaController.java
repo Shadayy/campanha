@@ -31,34 +31,34 @@ public class CampanhaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> criar(@Valid @RequestBody CampanhaDTO campanha) {
+	public ResponseEntity<Void> criar(@Valid @RequestBody CampanhaDTO campanha) {
 		campanhaService.criar(campanha);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> atualizar(@PathVariable(required = true) Long id, @Valid @RequestBody CampanhaDTO campanhaDTO) {
+	public ResponseEntity<Void> atualizar(@PathVariable(required = true) Long id, @Valid @RequestBody CampanhaDTO campanhaDTO) {
 		campanhaService.atualizar(id, campanhaDTO);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<CampanhaDTO> obter(@PathVariable(required = true) Long id) {
-		return new ResponseEntity<CampanhaDTO>(campanhaService.obter(id), HttpStatus.OK);
+		return new ResponseEntity<>(campanhaService.obter(id), HttpStatus.OK);
 	}
 	
 	@GetMapping("/listar")
 	public ResponseEntity<List<CampanhaDTO>> listar() {
-		return new ResponseEntity<List<CampanhaDTO>>(campanhaService.listarAtivoEVigente(), HttpStatus.OK);
+		return new ResponseEntity<>(campanhaService.listarAtivoEVigente(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/listar/{idTimeCoracao}")
 	public ResponseEntity<List<CampanhaDTO>> listar(@PathVariable(required = true) Long idTimeCoracao) {
-		return new ResponseEntity<List<CampanhaDTO>>(campanhaService.listarAtivoEVigente(idTimeCoracao), HttpStatus.OK);
+		return new ResponseEntity<>(campanhaService.listarAtivoEVigente(idTimeCoracao), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deletar(@PathVariable(required = true) Long id) {
+	public ResponseEntity<Void> deletar(@PathVariable(required = true) Long id) {
 		campanhaService.deletar(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

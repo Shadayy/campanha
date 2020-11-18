@@ -37,7 +37,7 @@ public class CampanhaBusinessImpl implements CampanhaBusiness{
 	}
 	
 	private void processarNovoTerminoVigencia(Long idCampanhaIgnorar, List<Campanha> campanhasAtualizar) {
-		List<Campanha> campanhasAtualizadas = new ArrayList<Campanha>();
+		List<Campanha> campanhasAtualizadas = new ArrayList<>();
 		
 		for (Campanha campanhaA : campanhasAtualizar) {
 			if(campanhaA.getId().equals(idCampanhaIgnorar)) continue;

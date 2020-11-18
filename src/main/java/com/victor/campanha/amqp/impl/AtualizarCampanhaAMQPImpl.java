@@ -32,6 +32,8 @@ public class AtualizarCampanhaAMQPImpl implements AtualizarCampanhaAMQP {
 	
 	@Override
 	public void sendCampanhaAtualizadaMessage(List<Campanha> campanhas) {
+		// TODO NAO TESTADO
+		
 		campanhas.forEach(campanha -> {
 			try {
 				this.rabbitTemplate.convertAndSend("campanha-atualizada", objectMapper.writeValueAsString(campanha));

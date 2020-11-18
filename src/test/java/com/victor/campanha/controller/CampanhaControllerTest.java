@@ -1,6 +1,7 @@
 package com.victor.campanha.controller;
 
 import static org.assertj.core.api.Assertions.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -115,7 +116,7 @@ class CampanhaControllerTest {
 		Long idCampanha = null;
 		
 		performAndExpect(
-				get("/campanha/{id}", idCampanha),
+				delete("/campanha/{id}", idCampanha),
 				status().isBadRequest()
 		);
 	}
@@ -125,7 +126,7 @@ class CampanhaControllerTest {
 		Long idCampanha = 1L;
 		
 		performAndExpect(
-				get("/campanha/{id}", idCampanha),
+				delete("/campanha/{id}", idCampanha),
 				status().isOk()
 		);
 	}

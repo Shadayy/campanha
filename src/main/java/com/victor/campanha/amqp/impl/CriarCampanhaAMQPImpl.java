@@ -39,6 +39,7 @@ public class CriarCampanhaAMQPImpl implements CriarCampanhaAMQP{
 	
 	@Override
 	public void sendCriarCampanhaMessage(Campanha campanha) {
+		// TODO NAO TESTADO
 		try {
 			this.rabbitTemplate.convertAndSend("criar-campanha", objectMapper.writeValueAsString(campanha));
 		} catch (Exception e) {
@@ -49,6 +50,8 @@ public class CriarCampanhaAMQPImpl implements CriarCampanhaAMQP{
 	@RabbitListener(queues = "criar-campanha", concurrency = "1", exclusive = true)
 	@Override
 	public void receiveCriarCampanhaMessage(String content) throws IOException {
+		// TODO NAO TESTADO
+		
 		log.debug("@@@@@@@@@@@@ msg criar-campanha: {}", content);
 		
 		Campanha campanha = objectMapper.readValue (content, Campanha.class);
