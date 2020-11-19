@@ -2,19 +2,20 @@ package com.victor.campanha.service;
 
 import java.util.List;
 
-import com.victor.campanha.dto.CampanhaDTO;
+import com.victor.campanha.dto.CampanhaDTOReceive;
+import com.victor.campanha.dto.CampanhaDTOResponse;
 
 public interface CampanhaService {
 
-	public void criar(CampanhaDTO campanha);
+	public void criar(CampanhaDTOReceive campanha);
 	
-	public void atualizar(Long id, CampanhaDTO campanhaDTO);
+	public void atualizar(Long id, CampanhaDTOReceive campanhaDTO);
 	
-	public CampanhaDTO obter(Long id);
+	public CampanhaDTOResponse obter(Long id);
 	
-	public List<CampanhaDTO> listarAtivoEVigente();
+	public List<CampanhaDTOResponse> listarAtivoEVigente();
 	
 	public void deletar(Long id);
 
-	public List<CampanhaDTO> listarAtivoEVigente(Long idTimeCoracao);
+	public List<CampanhaDTOResponse> listarAtivoEVigente(Long idTimeCoracao);
 }

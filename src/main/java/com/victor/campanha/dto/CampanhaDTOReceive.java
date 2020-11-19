@@ -6,12 +6,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.victor.campanha.entity.Campanha;
+import com.victor.campanha.util.Util;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-public class CampanhaDTO {
+public class CampanhaDTOReceive {
 	
 	@ApiModelProperty(required = true)
 	@NotBlank(message = "Nome da campanha é obrigatório")
@@ -32,11 +33,19 @@ public class CampanhaDTO {
 	@ApiModelProperty(required = true)
 	private Long terminoVigencia;
 	
-	public CampanhaDTO() {
+	public void setInicioVigencia(Long inicioVigencia) {
+		this.inicioVigencia = Util.truncMilliseconds(inicioVigencia);
+	}
+	
+	public void setTerminoVigencia(Long terminoVigencia) {
+		this.terminoVigencia = Util.truncMilliseconds(terminoVigencia);
+	}
+	
+	public CampanhaDTOReceive() {
 		
 	}
 	
-	public CampanhaDTO(Campanha campanha){
+	public CampanhaDTOReceive(Campanha campanha){
 		setNome(campanha.getNome());
 		setIdTimeCoracao(campanha.getIdTimeCoracao());
 		setInicioVigencia(campanha.getInicioVigencia());

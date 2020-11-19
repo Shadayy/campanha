@@ -44,7 +44,7 @@ public class CampanhaBusinessImpl implements CampanhaBusiness{
 			
 			for (Campanha campanhaB : campanhasAtualizar) {
 				if(!campanhaA.getId().equals(campanhaB.getId()) && campanhaA.getTerminoVigencia().equals(campanhaB.getTerminoVigencia())) {
-					campanhaA.aumentarDiasTerminoVigencia();
+					campanhaA.aumentarDiaTerminoVigencia();
 					campanhasAtualizadas.add(campanhaA);
 					break;
 				}

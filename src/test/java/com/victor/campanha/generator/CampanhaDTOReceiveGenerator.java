@@ -3,12 +3,12 @@ package com.victor.campanha.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.victor.campanha.dto.CampanhaDTO;
+import com.victor.campanha.dto.CampanhaDTOReceive;
 
-public class CampanhaDTOGenerator {
+public class CampanhaDTOReceiveGenerator {
 	
-	public CampanhaDTO generateValidCampanhaDTO() {
-		CampanhaDTO campanhaDTO = new CampanhaDTO();
+	public CampanhaDTOReceive generateValidCampanhaDTO() {
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceive();
 		campanhaDTO.setNome("Campanha - "+ AtomicIdGenerator.getInstance().getNewId());
 		campanhaDTO.setIdTimeCoracao(AtomicIdGenerator.getInstance().getNewId());
 		campanhaDTO.setInicioVigencia(AtomicIdGenerator.getInstance().getNewId());
@@ -17,10 +17,10 @@ public class CampanhaDTOGenerator {
 		return campanhaDTO;
 	}
 	
-	public List<CampanhaDTO> getInvalidListCampanhaDTO(){
-		List<CampanhaDTO> campanhasDTO = new ArrayList<>();
+	public List<CampanhaDTOReceive> getInvalidListCampanhaDTO(){
+		List<CampanhaDTOReceive> campanhasDTO = new ArrayList<>();
 		
-		CampanhaDTO campanhaDTO = generateValidCampanhaDTO();
+		CampanhaDTOReceive campanhaDTO = generateValidCampanhaDTO();
 		campanhaDTO.setIdTimeCoracao(null);
 		campanhasDTO.add(campanhaDTO);
 		

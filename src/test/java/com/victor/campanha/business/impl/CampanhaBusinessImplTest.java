@@ -20,6 +20,7 @@ import com.victor.campanha.amqp.AtualizarCampanhaAMQP;
 import com.victor.campanha.entity.Campanha;
 import com.victor.campanha.generator.CampanhaGenerator;
 import com.victor.campanha.repository.CampanhaRepository;
+import com.victor.campanha.util.Util;
 
 class CampanhaBusinessImplTest {
 	
@@ -48,15 +49,15 @@ class CampanhaBusinessImplTest {
 	
 	@Test
 	void when_salvar_with_campanhas_should_processarNovoTerminoVigencia() {
-		Long terminoVigencia1 = 1L;
-		Long terminoVigencia2 = 2L;
-		Long terminoVigencia3 = 3L;
+		Long terminoVigencia1 = Util.getDateMilliseconds(1);
+		Long terminoVigencia2 = Util.getDateMilliseconds(2);
+		Long terminoVigencia3 = Util.getDateMilliseconds(3);
 		
-		Campanha novaCampanha = new CampanhaGenerator().generateValidCampanha();
+		Campanha novaCampanha = new CampanhaGenerator().generateValidCampanhaWithRandomId();
 		
-		Campanha campanhaSalva1 = new CampanhaGenerator().generateValidCampanha();
-		Campanha campanhaSalva2 = new CampanhaGenerator().generateValidCampanha();
-		Campanha campanhaSalva3 = new CampanhaGenerator().generateValidCampanha();
+		Campanha campanhaSalva1 = new CampanhaGenerator().generateValidCampanhaWithRandomId();
+		Campanha campanhaSalva2 = new CampanhaGenerator().generateValidCampanhaWithRandomId();
+		Campanha campanhaSalva3 = new CampanhaGenerator().generateValidCampanhaWithRandomId();
 		
 		campanhaSalva1.setTerminoVigencia(terminoVigencia1);
 		campanhaSalva2.setTerminoVigencia(terminoVigencia2);

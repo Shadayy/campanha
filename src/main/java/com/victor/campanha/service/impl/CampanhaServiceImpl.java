@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.victor.campanha.amqp.CriarCampanhaAMQP;
-import com.victor.campanha.dto.CampanhaDTO;
+import com.victor.campanha.dto.CampanhaDTOReceive;
+import com.victor.campanha.dto.CampanhaDTOResponse;
 import com.victor.campanha.entity.Campanha;
 import com.victor.campanha.repository.CampanhaRepository;
 import com.victor.campanha.service.CampanhaService;
@@ -30,12 +31,12 @@ public class CampanhaServiceImpl implements CampanhaService {
 	}
 	
 	@Override
-	public void criar(CampanhaDTO campanhaDTO) {
+	public void criar(CampanhaDTOReceive campanhaDTO) {
 		this.campanhaAMQP.sendCriarCampanhaMessage(new Campanha(campanhaDTO));
 	}
 
 	@Override
-	public void atualizar(Long id, CampanhaDTO campanhaDTO) {
+	public void atualizar(Long id, CampanhaDTOReceive campanhaDTO) {
 		Campanha campanha = getCampanhaOrThrow(id);
 		campanha.setNome(campanhaDTO.getNome());
 		campanha.setIdTimeCoracao(campanhaDTO.getIdTimeCoracao());
@@ -46,26 +47,26 @@ public class CampanhaServiceImpl implements CampanhaService {
 	}
 
 	@Override
-	public CampanhaDTO obter(Long id) {
+	public CampanhaDTOResponse obter(Long id) {
 		Campanha campanha = getCampanhaOrThrow(id);
-		return new CampanhaDTO(campanha);
+		return new CampanhaDTOResponse(campanha);
 	}
 
 	@Override
-	public List<CampanhaDTO> listarAtivoEVigente() {
+	public List<CampanhaDTOResponse> listarAtivoEVigente() {
 		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(System.currentTimeMillis());
 		
 		return campanhas.stream()
-				.map(CampanhaDTO::new)
+				.map(CampanhaDTOResponse::new)
 				.collect(Collectors.toList());
 	}
 	
 	@Override
-	public List<CampanhaDTO> listarAtivoEVigente(Long idTimeDoCoracao) {
+	public List<CampanhaDTOResponse> listarAtivoEVigente(Long idTimeDoCoracao) {
 		List<Campanha> campanhas = this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(System.currentTimeMillis(), idTimeDoCoracao);
 		
 		return campanhas.stream()
-				.map(CampanhaDTO::new)
+				.map(CampanhaDTOResponse::new)
 				.collect(Collectors.toList());
 	}
 

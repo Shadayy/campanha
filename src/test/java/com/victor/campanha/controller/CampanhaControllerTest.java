@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.victor.campanha.dto.CampanhaDTO;
-import com.victor.campanha.generator.CampanhaDTOGenerator;
+import com.victor.campanha.dto.CampanhaDTOReceive;
+import com.victor.campanha.generator.CampanhaDTOReceiveGenerator;
 import com.victor.campanha.service.CampanhaService;
 
 @WebMvcTest(controllers = CampanhaController.class)
@@ -34,7 +34,7 @@ class CampanhaControllerTest {
 	
 	@Test
 	void when_post_campanha_without_error_then_returnCreated() {
-		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceiveGenerator().generateValidCampanhaDTO();
 		
 		performAndExpect(
 				post("/campanha"),
@@ -48,13 +48,13 @@ class CampanhaControllerTest {
 		performAndExpect(
 				post("/campanha"),
 				status().isBadRequest(), 
-				new CampanhaDTOGenerator().getInvalidListCampanhaDTO()
+				new CampanhaDTOReceiveGenerator().getInvalidListCampanhaDTO()
 		);
 	}
 	
 	@Test
 	void when_put_campanha_without_error_then_returnOk() throws Exception {
-		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceiveGenerator().generateValidCampanhaDTO();
 		Long idCampanha = 1L;
 		
 		performAndExpect(
@@ -69,7 +69,7 @@ class CampanhaControllerTest {
 		performAndExpect(
 				post("/campanha"),
 				status().isBadRequest(), 
-				new CampanhaDTOGenerator().getInvalidListCampanhaDTO()
+				new CampanhaDTOReceiveGenerator().getInvalidListCampanhaDTO()
 		);
 	}
 	

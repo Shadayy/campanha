@@ -19,9 +19,10 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.victor.campanha.amqp.CriarCampanhaAMQP;
-import com.victor.campanha.dto.CampanhaDTO;
+import com.victor.campanha.dto.CampanhaDTOReceive;
+import com.victor.campanha.dto.CampanhaDTOResponse;
 import com.victor.campanha.entity.Campanha;
-import com.victor.campanha.generator.CampanhaDTOGenerator;
+import com.victor.campanha.generator.CampanhaDTOReceiveGenerator;
 import com.victor.campanha.generator.CampanhaGenerator;
 import com.victor.campanha.repository.CampanhaRepository;
 
@@ -45,8 +46,8 @@ class CampanhaServiceImplTest {
 	void when_obter_with_valid_id_should_return() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
-		CampanhaDTO campanhaDTO = campanhaServiceImpl.obter(campanha.getId());
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
+		CampanhaDTOReceive campanhaDTO = this.campanhaServiceImpl.obter(campanha.getId());
 		
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(campanha.getNome(), campanhaDTO.getNome()),
@@ -59,11 +60,11 @@ class CampanhaServiceImplTest {
 	@Test
 	void when_obter_with_invalid_id_should_throw() {
 		Long idCampanha = 1l;
-		when(campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(
 				EntityNotFoundException.class, 
-				() -> campanhaServiceImpl.obter(idCampanha)
+				() -> this.campanhaServiceImpl.obter(idCampanha)
 		);
 	}
 	
@@ -71,9 +72,9 @@ class CampanhaServiceImplTest {
 	void when_listarAtivoEVigente_should_return_list() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
-		List<CampanhaDTO> campanhasDTO = campanhaServiceImpl.listarAtivoEVigente();
-		CampanhaDTO campanhaDTO = campanhasDTO.get(0);
+		when(this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
+		List<CampanhaDTOResponse> campanhasDTO = this.campanhaServiceImpl.listarAtivoEVigente();
+		CampanhaDTOReceive campanhaDTO = campanhasDTO.get(0);
 		
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(campanha.getNome(), campanhaDTO.getNome()),
@@ -82,8 +83,8 @@ class CampanhaServiceImplTest {
 				() -> Assertions.assertEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
 		);
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.emptyList());
-		campanhasDTO = campanhaServiceImpl.listarAtivoEVigente();
+		when(this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanEqualOrderByTerminoVigenciaAsc(Mockito.anyLong())).thenReturn(Collections.emptyList());
+		campanhasDTO = this.campanhaServiceImpl.listarAtivoEVigente();
 		
 		Assertions.assertTrue(campanhasDTO.isEmpty());
 	}
@@ -92,9 +93,9 @@ class CampanhaServiceImplTest {
 	void when_listarAtivoEVigente_with_id_should_return_list() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
-		List<CampanhaDTO> campanhasDTO = campanhaServiceImpl.listarAtivoEVigente(campanha.getIdTimeCoracao());
-		CampanhaDTO campanhaDTO = campanhasDTO.get(0);
+		when(this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Collections.singletonList(campanha));
+		List<CampanhaDTOResponse> campanhasDTO = this.campanhaServiceImpl.listarAtivoEVigente(campanha.getIdTimeCoracao());
+		CampanhaDTOReceive campanhaDTO = campanhasDTO.get(0);
 		
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(campanha.getNome(), campanhaDTO.getNome()),
@@ -103,8 +104,8 @@ class CampanhaServiceImplTest {
 				() -> Assertions.assertEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
 		);
 		
-		when(campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Collections.emptyList());
-		campanhasDTO = campanhaServiceImpl.listarAtivoEVigente(campanha.getIdTimeCoracao());
+		when(this.campanhaRepository.findAllByDeletadoFalseAndTerminoVigenciaGreaterThanAndIdTimeCoracao(Mockito.anyLong(), Mockito.anyLong())).thenReturn(Collections.emptyList());
+		campanhasDTO = this.campanhaServiceImpl.listarAtivoEVigente(campanha.getIdTimeCoracao());
 		
 		Assertions.assertTrue(campanhasDTO.isEmpty());
 	}
@@ -112,11 +113,11 @@ class CampanhaServiceImplTest {
 	@Test
 	void when_deletar_with_invalid_id_should_throw() {
 		Long idCampanha = 1l;
-		when(campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(
 				EntityNotFoundException.class, 
-				() -> campanhaServiceImpl.deletar(idCampanha)
+				() -> this.campanhaServiceImpl.deletar(idCampanha)
 		);
 	}
 	
@@ -124,8 +125,8 @@ class CampanhaServiceImplTest {
 	void when_deletar_with_valid_id_should_deletar() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
 		
-		when(campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
-		campanhaServiceImpl.deletar(campanha.getId());
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
+		this.campanhaServiceImpl.deletar(campanha.getId());
 		
 		Assertions.assertTrue(campanha.isDeletado());
 	}
@@ -133,19 +134,19 @@ class CampanhaServiceImplTest {
 	@Test
 	void when_atualizar_with_invalid_id_should_throw() {
 		Long idCampanha = 1l;
-		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
-		when(campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceiveGenerator().generateValidCampanhaDTO();
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(idCampanha)).thenReturn(Optional.empty());
 		
 		Assertions.assertThrows(
 				EntityNotFoundException.class, 
-				() -> campanhaServiceImpl.atualizar(idCampanha, campanhaDTO)
+				() -> this.campanhaServiceImpl.atualizar(idCampanha, campanhaDTO)
 		);
 	}
 	
 	@Test
 	void when_atualizar_with_valid_id_should_atualizarr() {
 		Campanha campanha = new CampanhaGenerator().generateValidCampanha();
-		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceiveGenerator().generateValidCampanhaDTO();
 		
 		Assertions.assertAll(
 				() -> Assertions.assertNotEquals(campanha.getNome(), campanhaDTO.getNome()),
@@ -154,9 +155,9 @@ class CampanhaServiceImplTest {
 				() -> Assertions.assertNotEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
 		);
 		
-		when(campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
+		when(this.campanhaRepository.findByIdAndDeletadoFalse(campanha.getId())).thenReturn(Optional.of(campanha));
 		
-		campanhaServiceImpl.atualizar(campanha.getId(), campanhaDTO);
+		this.campanhaServiceImpl.atualizar(campanha.getId(), campanhaDTO);
 		
 		Assertions.assertAll(
 				() -> Assertions.assertEquals(campanha.getNome(), campanhaDTO.getNome()),
@@ -165,15 +166,15 @@ class CampanhaServiceImplTest {
 				() -> Assertions.assertEquals(campanha.getTerminoVigencia(), campanhaDTO.getTerminoVigencia())
 		);
 		
-		verify(criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
+		verify(this.criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
 	}
 	
 	@Test
 	void when_criar_should_call_sendCriarCampanhaMessage() {
-		CampanhaDTO campanhaDTO = new CampanhaDTOGenerator().generateValidCampanhaDTO();
+		CampanhaDTOReceive campanhaDTO = new CampanhaDTOReceiveGenerator().generateValidCampanhaDTO();
 		
-		campanhaServiceImpl.criar(campanhaDTO);
+		this.campanhaServiceImpl.criar(campanhaDTO);
 		
-		verify(criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
+		verify(this.criarCampanhaAMQP, times(1)).sendCriarCampanhaMessage(Mockito.any());
 	}
 }
