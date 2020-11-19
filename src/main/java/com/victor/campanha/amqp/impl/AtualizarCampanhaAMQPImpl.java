@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.campanha.amqp.AtualizarCampanhaAMQP;
 import com.victor.campanha.entity.Campanha;
+import com.victor.campanha.exception.InaccessibleQueueException;
 
 @Component
 public class AtualizarCampanhaAMQPImpl implements AtualizarCampanhaAMQP {
@@ -32,13 +33,11 @@ public class AtualizarCampanhaAMQPImpl implements AtualizarCampanhaAMQP {
 	
 	@Override
 	public void sendCampanhaAtualizadaMessage(List<Campanha> campanhas) {
-		// TODO NAO TESTADO
-		
 		campanhas.forEach(campanha -> {
 			try {
 				this.rabbitTemplate.convertAndSend("campanha-atualizada", objectMapper.writeValueAsString(campanha));
 			} catch (Exception e) {
-				throw new RuntimeException(e);
+				throw new InaccessibleQueueException(e);
 			}
 		});
 	}

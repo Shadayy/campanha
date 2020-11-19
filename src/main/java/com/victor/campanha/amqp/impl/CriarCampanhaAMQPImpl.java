@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.victor.campanha.amqp.CriarCampanhaAMQP;
 import com.victor.campanha.business.CampanhaBusiness;
 import com.victor.campanha.entity.Campanha;
+import com.victor.campanha.exception.InaccessibleQueueException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,19 +40,16 @@ public class CriarCampanhaAMQPImpl implements CriarCampanhaAMQP{
 	
 	@Override
 	public void sendCriarCampanhaMessage(Campanha campanha) {
-		// TODO NAO TESTADO
 		try {
 			this.rabbitTemplate.convertAndSend("criar-campanha", objectMapper.writeValueAsString(campanha));
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new InaccessibleQueueException(e);
 		}
 	}
 	
 	@RabbitListener(queues = "criar-campanha", concurrency = "1", exclusive = true)
 	@Override
 	public void receiveCriarCampanhaMessage(String content) throws IOException {
-		// TODO NAO TESTADO
-		
 		log.debug("@@@@@@@@@@@@ msg criar-campanha: {}", content);
 		
 		Campanha campanha = objectMapper.readValue (content, Campanha.class);
