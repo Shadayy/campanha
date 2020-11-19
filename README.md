@@ -14,7 +14,9 @@ Todas as APIs podem ser utilizadas diretamente pelo Swagger.
     *  http://localhost:5672
 
 # Estrutura da aplicação
-A aplicação faz uso do Flyway para upgrade do BD
+*  A aplicação faz uso do Flyway para upgrade do BD
+*  A aplicação faz envio de mensagens para duas filas uma para criação e uma para notificar atualização das campanhas
+*  A aplicação consome a fila de criação de campanhas com apenas 1 consumidor para garantir a não sobreposição das datas de termino de vigência
 
 # Estrutura do projeto
 
